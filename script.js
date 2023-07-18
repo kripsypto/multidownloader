@@ -1,22 +1,23 @@
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return app.send_static_file('index.html')
-
-@app.route('/download', methods=['POST'])
-def download():
-    video_url = request.json.get('videoUrl')
-
-    # Implement the YouTube downloading functionality here using a library like pytube
-    
-    # Placeholder response message
-    message = f'Downloading video: {video_url}'
-    
-    # Return the response
-    return jsonify({'message': message})
-
-if __name__ == '__main__':
-    app.run()
+function downloadVideo() {
+    var videoUrl = document.getElementById('videoUrl').value;
+    if (videoUrl) {
+        // Send a request to the backend server to initiate the download
+        fetch('/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoUrl: videoUrl })
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            // Show the download message
+            document.getElementById('message').innerHTML = data.message;
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+}
